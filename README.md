@@ -43,6 +43,7 @@ helper is Windows-only and is separate from the AMO extension package.
 Firefox may ask you to consent to processing website content. This refers to
 content you explicitly select or enter and send through the extension to your
 local OneNote app; this project does not operate a cloud service for that data.
+See the [privacy policy](PRIVACY.md) for details.
 
 ## Use it
 
@@ -140,6 +141,7 @@ ayrı kurulur.
 Firefox, web sitesi içeriğinin işlenmesi için onay isteyebilir. Bu açıklama,
 eklentiyle açıkça seçip veya girip yerel OneNote uygulamanıza gönderdiğiniz
 içeriği kapsar; proje bu veriler için bulut servisi işletmez.
+[Gizlilik politikası](PRIVACY.md) ayrıntıları açıklar.
 
 ### Kullanım
 

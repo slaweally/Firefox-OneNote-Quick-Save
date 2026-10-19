@@ -1,3 +1,7 @@
+param(
+    [switch]$SourceOnly
+)
+
 $ErrorActionPreference = 'Stop'
 
 $manifestPath = Join-Path $PSScriptRoot 'manifest.json'
@@ -13,6 +17,7 @@ $files = @(
     'i18n.js',
     'background.js',
     'README.md',
+    'PRIVACY.md',
     'install.ps1',
     'install-native-host.ps1',
     'package-xpi.ps1',
@@ -27,7 +32,9 @@ foreach ($relativePath in $files) {
     }
 }
 
-& (Join-Path $PSScriptRoot 'package-xpi.ps1')
+if (-not $SourceOnly) {
+    & (Join-Path $PSScriptRoot 'package-xpi.ps1')
+}
 
 if (Test-Path -LiteralPath $stageDir) {
     Remove-Item -LiteralPath $stageDir -Recurse -Force
