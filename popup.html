@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>OneNote Quick Save</title>
+<style>
+  :root {
+    --purple: #7719aa; --purple-dark: #5c1385; --purple-soft: #f3e8fa;
+    --text: #201f1e; --muted: #605e5c; --border: #d9c9e5;
+    --ok: #107c10; --err: #a4262c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; width: 340px; font: 14px/1.4 "Segoe UI", system-ui, sans-serif;
+    color: var(--text); background: #fff;
+  }
+  header {
+    display: flex; align-items: center; gap: 10px; padding: 12px 16px;
+    background: var(--purple); color: #fff; font-weight: 600;
+  }
+  header .logo {
+    width: 24px; height: 24px; border-radius: 5px; background: #fff; color: var(--purple);
+    display: grid; place-items: center; font-weight: 700;
+  }
+  main { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  [hidden] { display: none !important; }
+  p { margin: 0; color: var(--muted); }
+  button {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 10px 14px; border: 0; border-radius: 6px; font: inherit; font-weight: 600;
+    background: var(--purple); color: #fff; cursor: pointer;
+  }
+  button:hover:not(:disabled) { background: var(--purple-dark); }
+  button:disabled { opacity: .6; cursor: not-allowed; }
+  button.link {
+    background: none; color: var(--purple); padding: 2px 4px; font-weight: 500; text-decoration: underline;
+  }
+  button.link:hover:not(:disabled) { background: var(--purple-soft); color: var(--purple-dark); }
+  textarea {
+    width: 100%; height: 150px; resize: vertical; padding: 10px; font: inherit;
+    border: 1px solid var(--border); border-radius: 6px; background: var(--purple-soft);
+  }
+  textarea:focus { outline: 2px solid var(--purple); background: #fff; }
+  select {
+    width: 100%; padding: 9px; font: inherit; border: 1px solid var(--border);
+    border-radius: 6px; background: #fff;
+  }
+  button:focus-visible, select:focus-visible, textarea:focus-visible {
+    outline: 2px solid var(--purple); outline-offset: 2px;
+  }
+  .target-help, .notice { font-size: 12px; }
+  .capture-actions { display: flex; gap: 8px; }
+  .capture-actions button { flex: 1; padding: 8px; font-size: 12px; }
+  #preview {
+    width: 100%; height: 180px; border: 1px solid var(--border);
+    background-color: var(--purple-soft); background-position: center;
+    background-repeat: no-repeat; background-size: contain;
+  }
+  .spinner {
+    width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff;
+    border-radius: 50%; animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #status { font-size: 13px; }
+  #status.ok { color: var(--ok); }
+  #status.err { color: var(--err); }
+</style>
+</head>
+<body>
+<header><div class="logo">N</div>OneNote Quick Save</header>
+<main>
+  <label for="languageSelect" data-i18n="language">Dil</label>
+  <select id="languageSelect" aria-label="Language / Dil">
+    <option value="tr">Türkçe</option>
+    <option value="en">English</option>
+  </select>
+  <section id="languageGate" hidden>
+    <p data-i18n="languageIntro">Choose a language / Kullanmak istediğiniz dili seçin</p>
+    <button id="continueBtn" type="button" data-i18n="continue">Devam et</button>
+  </section>
+  <section id="app" hidden style="display:flex;flex-direction:column;gap:12px">
+    <p data-i18n="localAccount">OneNote masaüstü hesabınız kullanılır. Microsoft hesabı veya Azure üzerinden giriş yapılmaz.</p>
+    <label for="sectionSelect" data-i18n="newNoteSection">Yeni notun OneNote bölümü</label>
+    <select id="sectionSelect" aria-label="OneNote bölümü">
+      <option value="" data-i18n="sectionPlaceholder">OneNote bölümü seçin…</option>
+    </select>
+    <p class="target-help" data-i18n="sectionHelp">Sağ tık menüsünde gönderim hedefini bölüm listesinden seçebilirsin.</p>
+    <button id="refreshSectionsBtn" class="link" type="button" data-i18n="refreshSections">Bölümleri yenile</button>
+    <textarea id="note" placeholder="Notunuzu düzenleyin…" aria-label="Not içeriği" data-i18n-placeholder="notePlaceholder" data-i18n-aria-label="noteContent"></textarea>
+    <div class="capture-actions">
+      <button id="insertSelectionBtn" type="button" data-i18n="insertSelection">Seçili metni ekle</button>
+      <button id="captureSelectionBtn" type="button" data-i18n="captureSelection">Seçili alanın görüntüsünü al</button>
+    </div>
+    <p class="notice" data-i18n="privacy">Metin veya görüntü yalnızca açıkça seçtiğin tarayıcı içeriğinden alınır ve bu bilgisayardaki OneNote uygulamasına gönderilir.</p>
+    <div id="preview" role="img" aria-label="OneNote'a eklenecek seçili alanın önizlemesi" data-i18n-aria-label="imagePreview" hidden></div>
+    <button id="removeImageBtn" class="link" type="button" data-i18n="removeImage" hidden>Görüntüyü kaldır</button>
+    <button id="saveBtn"><span class="spinner" hidden></span><span class="label" data-i18n="save">OneNote'a Kaydet</span></button>
+  </section>
+  <div id="status" role="status" aria-live="polite"></div>
+</main>
+<script src="i18n.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>
