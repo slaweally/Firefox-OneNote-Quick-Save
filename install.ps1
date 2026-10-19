@@ -1,6 +1,6 @@
 $ErrorActionPreference = 'Stop'
 
-$repositoryArchive = 'https://github.com/slaweally/one-note-firefox-sync/archive/refs/heads/main.zip'
+$repositoryArchive = 'https://github.com/slaweally/Firefox-OneNote-Quick-Save/archive/refs/heads/main.zip'
 $installDir = Join-Path $env:LOCALAPPDATA 'Firefox-OneNote-Quick-Save'
 $tempDir = Join-Path $env:TEMP ('Firefox-OneNote-Quick-Save-' + [Guid]::NewGuid().ToString('N'))
 $archivePath = Join-Path $tempDir 'source.zip'
@@ -28,17 +28,9 @@ try {
     }
 
     Write-Host ''
-    Write-Host 'Local OneNote connection installed.'
-    Write-Host 'One manual Firefox step is still required because temporary add-ons must be loaded by the user:'
-    Write-Host '  1. Open about:debugging#/runtime/this-firefox'
-    Write-Host '  2. Choose Load Temporary Add-on...'
-    Write-Host "  3. Select: $(Join-Path $installDir 'manifest.json')"
-
-    try {
-        Start-Process -FilePath 'firefox.exe' -ArgumentList 'about:debugging#/runtime/this-firefox'
-    } catch {
-        Write-Host 'Open the Firefox address above to finish loading the extension.'
-    }
+    Write-Host 'Local OneNote connection installed for the current Windows user.'
+    Write-Host 'Restart Firefox to let it connect to the native host.'
+    Write-Host 'Install the signed extension from Firefox Add-ons (AMO) when it is published.'
 } finally {
     if (Test-Path -LiteralPath $tempDir) {
         Remove-Item -LiteralPath $tempDir -Recurse -Force

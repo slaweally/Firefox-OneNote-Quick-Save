@@ -15,6 +15,7 @@ $files = @(
     'README.md',
     'install.ps1',
     'install-native-host.ps1',
+    'package-xpi.ps1',
     'native-host\Program.cs',
     'icons\onenote.svg'
 )
@@ -25,6 +26,8 @@ foreach ($relativePath in $files) {
         throw "Paket dosyası bulunamadı: $relativePath"
     }
 }
+
+& (Join-Path $PSScriptRoot 'package-xpi.ps1')
 
 if (Test-Path -LiteralPath $stageDir) {
     Remove-Item -LiteralPath $stageDir -Recurse -Force
