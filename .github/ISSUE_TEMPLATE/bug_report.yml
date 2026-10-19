@@ -1,0 +1,53 @@
+name: Bug report
+description: Report a reproducible issue with the extension or Windows bridge.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please do not include passwords, personal notes, account details, or private page content.
+  - type: input
+    id: firefox-version
+    attributes:
+      label: Firefox version
+      placeholder: "For example, 142.0"
+    validations:
+      required: true
+  - type: input
+    id: windows-version
+    attributes:
+      label: Windows version
+      placeholder: "For example, Windows 11 24H2"
+    validations:
+      required: true
+  - type: input
+    id: onenote-version
+    attributes:
+      label: OneNote desktop version
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Describe what you did and what you expected to happen.
+      placeholder: |
+        1. Open OneNote desktop...
+        2. Select text in Firefox...
+        3. Choose a OneNote section...
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error message (if any)
+      description: Remove any private content before posting.
+    validations:
+      required: false

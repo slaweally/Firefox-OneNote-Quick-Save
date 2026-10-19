@@ -1,29 +1,49 @@
+<div align="center">
+
 # Firefox OneNote Quick Save
 
-Send text you select or an image of the selected area in Firefox to a new page
-in the **OneNote desktop app on Windows**. Page titles use the active tab title.
-No Azure app, Microsoft Graph permission, or separate Microsoft sign-in is
-needed: the local OneNote desktop app handles the existing signed-in account.
+**Save selected text and screenshots from Firefox straight to OneNote.**
 
-## Install the extension
+Windows · Firefox 142+ · OneNote desktop · English & Türkçe
 
-After Mozilla approves the AMO listing, install it from Firefox Add-ons:
+[Get the latest release](https://github.com/slaweally/Firefox-OneNote-Quick-Save/releases/latest) · [Report a bug](https://github.com/slaweally/Firefox-OneNote-Quick-Save/issues/new?template=bug_report.yml) · [Privacy](PRIVACY.md)
 
-**AMO listing:** to be added after approval.
+![Firefox OneNote Quick Save blog cover](docs/cover.png)
 
-Until then, `Firefox-OneNote-Quick-Save-v1.3.1.xpi` in the
-[GitHub v1.3.1 release](https://github.com/slaweally/Firefox-OneNote-Quick-Save/releases/tag/v1.3.1)
-is an **unsigned AMO submission package**, not a directly installable release
-for regular Firefox. Submit that XPI through the AMO Developer Hub. Firefox
-will install the signed version after Mozilla review. For local testing before
-then, download the source ZIP from the same release, install the bridge below,
-open `about:debugging#/runtime/this-firefox`, choose **Load Temporary Add-on…**,
-and select the extracted `manifest.json`. Temporary add-ons must be loaded
-again after Firefox restarts.
+</div>
 
-## Connect the local OneNote bridge
+> **AMO status:** v1.3.1 has been submitted to Mozilla and is awaiting review.
+> Until it is approved, the XPI attached to the GitHub release is not a
+> signed, directly installable Firefox add-on.
 
-Requirements: Windows, Firefox 142+, and the OneNote desktop app.
+## What it does
+
+Save useful things you find on the web without switching apps and pasting
+manually. Choose a section in your OneNote notebook; the active Firefox tab
+title becomes the new page title.
+
+- **Save selected text:** right-click your selection and choose a OneNote
+  section.
+- **Save a selection as an image:** send the visible selected area to a
+  OneNote section.
+- **Write a quick note:** use the popup to edit a note, add selected text or an
+  image, and save.
+- **Use your language:** choose English or Türkçe on first launch.
+
+## Install
+
+### 1. Install the Firefox extension
+
+Once Mozilla approves the submission, install it from
+[Firefox Add-ons (AMO)](https://addons.mozilla.org/en-US/firefox/addon/onenote-quick-save/).
+For now, see the [v1.3.1 release](https://github.com/slaweally/Firefox-OneNote-Quick-Save/releases/tag/v1.3.1)
+for the submitted XPI and source code. The unsigned XPI is for review and
+testing only; regular Firefox requires Mozilla's signature for installation.
+
+### 2. Connect the local OneNote app (Windows)
+
+Requirements: Windows, Firefox 142 or later, and the OneNote **desktop** app
+installed and signed in.
 
 Run this command in PowerShell:
 
@@ -31,95 +51,110 @@ Run this command in PowerShell:
 irm https://raw.githubusercontent.com/slaweally/Firefox-OneNote-Quick-Save/main/install.ps1 | iex
 ```
 
-The installer downloads the bridge source from this repository, compiles it
-using the Windows .NET Framework compiler, and registers a Firefox
-Native Messaging host for the current Windows user. No administrator access
-or prebuilt executable download is needed. Restart Firefox after setup.
+The installer downloads the bridge source, compiles it with the Windows .NET
+Framework compiler, and registers Firefox Native Messaging for your Windows
+user. It does not download a prebuilt executable and does not require
+administrator access. Restart Firefox after it finishes.
 
-The helper and Firefox extension communicate locally through Firefox Native
-Messaging. The helper uses the OneNote desktop COM interface to list sections
-and create pages. Keep the OneNote desktop app installed and signed in. The
-helper is Windows-only and is separate from the AMO extension package.
-Firefox may ask you to consent to processing website content. This refers to
-content you explicitly select or enter and send through the extension to your
-local OneNote app; this project does not operate a cloud service for that data.
-See the [privacy policy](PRIVACY.md) for details.
+**Before AMO approval:** download the release source ZIP, install the bridge,
+then open `about:debugging#/runtime/this-firefox` in Firefox. Select **Load
+Temporary Add-on…** and choose `manifest.json` from the extracted source
+folder. Firefox removes temporary add-ons when it restarts, so reload it for
+each test session.
 
-## Use it
+## How it works
 
-1. Open the extension and choose **Türkçe** or **English** the first time.
-2. Select webpage text, right-click, then choose **Send to OneNote** and a
-   section. For an image, choose **Send selected area as an image…** and a
-   section.
-3. Or open the popup to choose a section, edit a note, add selected text or an
-   image, and save.
+```text
+Firefox extension ── Native Messaging (this computer) ── OneNote desktop app
+```
 
-The page title is taken from the active Firefox tab. The extension stores the
-language and selected destination section in Firefox local extension storage.
+No Azure app registration, Microsoft Graph permission, separate account
+sign-in, or project cloud service is involved. The bridge uses the local
+OneNote desktop automation interface to list sections and create pages.
 
-## Build packages
+## Privacy
+
+The extension only accesses content when you explicitly use a save action. It
+passes selected text, the selected visible-area image, or the note you entered
+to the local OneNote bridge, along with the tab title and destination section.
+The extension does not read Firefox saved passwords, autofill data, or
+browsing history, and this project does not receive the content.
+
+The language and destination preference are stored in Firefox's local
+extension storage. OneNote may sync pages using your Microsoft account and
+OneNote settings; the extension does not control that. Read the full
+[privacy policy](PRIVACY.md).
+
+## Troubleshooting
+
+| Problem | Try this |
+| --- | --- |
+| No OneNote sections appear | Open and sign in to the Windows OneNote desktop app, then refresh sections in the extension. |
+| “Local OneNote bridge” is missing | Run the PowerShell setup command again and restart Firefox. |
+| The add-on is unavailable in AMO | Mozilla review is still pending. Use temporary loading for testing; the unsigned XPI will not install normally. |
+| Firefox says it is incompatible | Use Firefox 142 or newer. |
+
+## Help improve it
+
+Found a problem? [Open a bug report](https://github.com/slaweally/Firefox-OneNote-Quick-Save/issues/new?template=bug_report.yml).
+Have an idea? [Suggest a feature](https://github.com/slaweally/Firefox-OneNote-Quick-Save/issues/new?template=feature_request.yml).
+Please include your Windows version and Firefox version, but never include
+private notes, account details, or passwords.
+
+If this project is useful to you, consider giving the repository a ⭐. Stars
+help other OneNote and Firefox users discover it.
+
+## Build from source
+
+PowerShell in the project directory:
 
 ```powershell
 .\package-xpi.ps1
 ```
 
-Builds the Firefox add-on package under `dist`. To create both the XPI and the
-source ZIP for GitHub:
-
-```powershell
-.\package-release.ps1
-```
-
-The XPI contains only extension files; the source ZIP also contains the
-Windows bridge source and installer. The XPI produced locally is unsigned until
-Mozilla signs it.
-
-## Permissions and data
-
-- `activeTab` and `scripting`: read the selected text and its visible bounds
-  after the user invokes an extension action.
-- `contextMenus`: provide the OneNote right-click actions.
-- `nativeMessaging`: send the selected content to the separately installed
-  local OneNote bridge.
-- `storage`: save the language and destination-section preference locally.
-- `notifications`: show whether a send succeeded or failed.
-
-Selected text, screenshots, and notes are passed to the OneNote desktop app on
-this computer. This extension does not send them to its developer or to a
-service operated by this project, and it does not read Firefox saved passwords
-or autofill data. OneNote may sync content according to the user's Microsoft
-account and OneNote settings. Review the extension source and the [Mozilla
-Add-on policies](https://extensionworkshop.com/documentation/publish/add-on-policies/).
+Builds the extension package under `dist`. To also create the GitHub source
+archive, run `.\package-release.ps1`. The XPI includes only extension files;
+the local Windows bridge is installed separately.
 
 ## Firefox OneNote Quick Save (Türkçe)
 
-Firefox'ta seçtiğiniz metni veya seçili alanın görüntüsünü, **Windows OneNote
-masaüstü uygulamasında** yeni bir sayfaya gönderir. Sayfa başlığı etkin
-sekmeden alınır. Azure uygulaması, Microsoft Graph izni veya ayrıca Microsoft
-hesabına giriş gerekmez; masaüstü OneNote uygulamasında zaten açık olan hesap
-kullanılır.
+**Firefox'ta seçtiğiniz metni ve görüntüleri doğrudan OneNote'a kaydedin.**
 
-### Eklentiyi yükleme
+Windows · Firefox 142+ · OneNote masaüstü · Türkçe ve English
 
-Mozilla AMO listelemesini onayladıktan sonra eklentiyi Firefox Eklentileri'nden
-yükleyebilirsiniz:
+[Son sürüm](https://github.com/slaweally/Firefox-OneNote-Quick-Save/releases/latest) · [Hata bildir](https://github.com/slaweally/Firefox-OneNote-Quick-Save/issues/new?template=bug_report.yml) · [Gizlilik](PRIVACY.md)
 
-**AMO sayfası:** Onaydan sonra eklenecek.
+> **AMO durumu:** v1.3.1 Mozilla incelemesine gönderildi; onay bekliyor.
+> Onaylanana kadar GitHub sürümündeki XPI, Firefox'a doğrudan kurulabilen
+> imzalı bir eklenti değildir.
 
-O zamana kadar [GitHub v1.3.1 sürümündeki
-`Firefox-OneNote-Quick-Save-v1.3.1.xpi`](https://github.com/slaweally/Firefox-OneNote-Quick-Save/releases/tag/v1.3.1),
-**AMO'ya gönderilmek üzere hazırlanmış imzasız pakettir**; normal Firefox'a
-doğrudan kalıcı olarak yüklenemez. XPI dosyasını AMO Developer Hub üzerinden
-Mozilla'ya gönderin. İnceleme sonrasında Firefox imzalı sürümü yükleyebilir.
-İnceleme öncesi yerel deneme için aynı sürümün kaynak ZIP dosyasını indirin,
-aşağıdaki köprüyü kurun, `about:debugging#/runtime/this-firefox` adresini açın,
-**Geçici Eklenti Yükle…** düğmesine basın ve açılmış kaynak klasöründeki
-`manifest.json` dosyasını seçin. Geçici eklentiyi Firefox yeniden başladıktan
-sonra tekrar yüklemek gerekir.
+## Ne işe yarar?
 
-### OneNote yerel bağlantısını kurma
+Web'de bulduğunuz içeriği uygulamalar arasında kopyalayıp yapıştırmadan
+OneNote'a kaydedin. OneNote bölümünü seçin; yeni sayfanın başlığı etkin
+Firefox sekmesinden alınsın.
 
-Gereksinimler: Windows, Firefox 142 veya üzeri ve OneNote masaüstü uygulaması.
+- **Seçili metni kaydedin:** Metni seçip sağ tıklayın ve OneNote bölümünü seçin.
+- **Seçili alanı görüntü olarak kaydedin:** Ekranda görünen seçimi bir OneNote
+  bölümüne gönderin.
+- **Hızlı not yazın:** Eklenti penceresinde notunuzu düzenleyin; seçili metin
+  veya görüntü ekleyip kaydedin.
+- **Dilinizi seçin:** İlk açılışta Türkçe veya English seçin.
+
+## Kurulum
+
+### 1. Firefox eklentisini yükleyin
+
+Mozilla incelemesi onaylandığında eklentiyi
+[Firefox Eklentileri'nden (AMO)](https://addons.mozilla.org/en-US/firefox/addon/onenote-quick-save/)
+yükleyebilirsiniz. Şimdilik [v1.3.1 sürümünde](https://github.com/slaweally/Firefox-OneNote-Quick-Save/releases/tag/v1.3.1)
+gönderilen XPI ve kaynak kodu var. İmzasız XPI inceleme ve test içindir; normal
+Firefox'a kurulum için Mozilla imzası gerekir.
+
+### 2. Yerel OneNote bağlantısını kurun (Windows)
+
+Gereksinimler: Windows, Firefox 142 veya üzeri ve kurulu, hesabınızın açık
+olduğu OneNote **masaüstü** uygulaması.
 
 PowerShell'de şu komutu çalıştırın:
 
@@ -127,65 +162,68 @@ PowerShell'de şu komutu çalıştırın:
 irm https://raw.githubusercontent.com/slaweally/Firefox-OneNote-Quick-Save/main/install.ps1 | iex
 ```
 
-Kurulum betiği bu depodan köprü kaynak kodunu indirir, Windows .NET Framework
-derleyicisini kullanarak derler ve geçerli Windows kullanıcısı için Firefox
-Native Messaging kaydını yapar. Yönetici izni veya önceden derlenmiş bir EXE
-indirmez. Kurulumdan sonra Firefox'u yeniden başlatın.
+Kurulum betiği köprü kaynak kodunu indirir, Windows .NET Framework derleyicisi
+ile derler ve geçerli Windows kullanıcısı için Firefox Native Messaging
+kaydını oluşturur. Önceden derlenmiş bir EXE indirmez ve yönetici izni
+gerektirmez. Kurulum bitince Firefox'u yeniden başlatın.
 
-Yardımcı uygulama ile Firefox eklentisi, Firefox Native Messaging üzerinden
-bu bilgisayarda haberleşir. Yardımcı, OneNote masaüstü COM arayüzünü kullanarak
-bölümleri listeler ve sayfalar oluşturur. OneNote masaüstü uygulaması kurulu ve
-hesabınız açık olmalıdır. Yardımcı Windows'a özeldir ve AMO eklenti paketinden
-ayrı kurulur.
+**AMO onayı öncesi deneme:** Sürümün kaynak ZIP dosyasını indirin, köprüyü
+kurun, Firefox'ta `about:debugging#/runtime/this-firefox` adresini açın.
+**Geçici Eklenti Yükle…** düğmesine tıklayıp açılmış kaynak klasöründeki
+`manifest.json` dosyasını seçin. Firefox geçici eklentileri yeniden başlarken
+kaldırır; her test oturumunda yeniden yükleyin.
 
-Firefox, web sitesi içeriğinin işlenmesi için onay isteyebilir. Bu açıklama,
-eklentiyle açıkça seçip veya girip yerel OneNote uygulamanıza gönderdiğiniz
-içeriği kapsar; proje bu veriler için bulut servisi işletmez.
-[Gizlilik politikası](PRIVACY.md) ayrıntıları açıklar.
+## Nasıl çalışır?
 
-### Kullanım
+```text
+Firefox eklentisi ── Native Messaging (bu bilgisayarda) ── OneNote masaüstü
+```
 
-1. Eklentiyi açıp ilk kullanımda **Türkçe** veya **English** dilini seçin.
-2. Web sayfasında metin seçip sağ tıklayın; **OneNote’a gönder** öğesinden
-   bölümü seçin. Görüntü için **Seçili alanı görüntü olarak gönder…** öğesini
-   ve hedef bölümü seçin.
-3. Alternatif olarak eklenti penceresini açıp bölüm seçin, notu düzenleyin,
-   seçili metin veya görüntüyü ekleyin ve kaydedin.
+Azure uygulama kaydı, Microsoft Graph izni, ayrıca hesap girişi veya projeye
+ait bir bulut servisi kullanılmaz. Köprü, OneNote masaüstü uygulamasının yerel
+otomasyon arayüzüyle bölümleri listeler ve sayfaları oluşturur.
 
-Yeni sayfanın başlığı etkin Firefox sekmesinden alınır. Dil ve hedef bölüm
-tercihi Firefox'un yerel eklenti depolamasında tutulur.
+## Gizlilik
 
-### Paketleri oluşturma
+Eklenti içeriğe yalnızca kaydetme eylemini siz başlattığınızda erişir. Seçili
+metin, seçili görünür alanın görüntüsü veya yazdığınız not; sekme başlığı ve
+hedef bölümle birlikte bu bilgisayardaki OneNote köprüsüne aktarılır. Eklenti
+Firefox kayıtlı parolalarını, otomatik doldurma verilerini veya gezinme
+geçmişini okumaz; proje bu içeriği almaz.
+
+Dil ve hedef bölüm tercihi Firefox'un yerel eklenti depolamasında tutulur.
+OneNote sayfaları Microsoft hesabınız ve OneNote ayarlarınıza göre
+eşitleyebilir; eklenti bunu yönetmez. Ayrıntılar için [gizlilik politikasını](PRIVACY.md)
+okuyun.
+
+## Sorun giderme
+
+| Sorun | Deneyin |
+| --- | --- |
+| OneNote bölümü görünmüyor | Windows OneNote masaüstü uygulamasını açıp oturum açın; sonra eklentiden bölümleri yenileyin. |
+| Yerel OneNote köprüsü bulunamıyor | PowerShell kurulum komutunu tekrar çalıştırıp Firefox'u yeniden başlatın. |
+| AMO'da eklenti bulunmuyor | Mozilla incelemesi sürüyor olabilir. Test için geçici yüklemeyi kullanın; imzasız XPI normal şekilde kurulamaz. |
+| Firefox eklentiyle uyumsuz diyor | Firefox 142 veya üzerini kullanın. |
+
+## Katkı ve geri bildirim
+
+Sorunla karşılaştınız mı? [Hata bildirimi açın](https://github.com/slaweally/Firefox-OneNote-Quick-Save/issues/new?template=bug_report.yml).
+Bir fikriniz mi var? [Özellik önerin](https://github.com/slaweally/Firefox-OneNote-Quick-Save/issues/new?template=feature_request.yml).
+Windows ve Firefox sürümünüzü yazabilirsiniz; özel not, hesap bilgisi veya
+parola paylaşmayın.
+
+Proje işinize yarıyorsa depoya ⭐ bırakmayı düşünebilirsiniz. Yıldızlar,
+eklentiye ihtiyaç duyabilecek diğer Firefox ve OneNote kullanıcılarının projeyi
+keşfetmesine yardımcı olur.
+
+## Kaynak koddan paketleme
+
+Proje klasöründe PowerShell açıp çalıştırın:
 
 ```powershell
 .\package-xpi.ps1
 ```
 
-Firefox eklenti paketini `dist` klasörüne oluşturur. Hem XPI hem de GitHub
-kaynak ZIP dosyasını oluşturmak için:
-
-```powershell
-.\package-release.ps1
-```
-
-XPI yalnızca eklenti dosyalarını; kaynak ZIP'i ise Windows köprüsünün kaynak
-kodunu ve kurulum betiğini de içerir. Yerel olarak üretilen XPI, Mozilla
-imzalayana kadar imzasızdır.
-
-### İzinler ve veriler
-
-- `activeTab` ve `scripting`: kullanıcı eklenti eylemini başlattığında seçili
-  metni ve ekrandaki sınırlarını okumak için.
-- `contextMenus`: sağ tık OneNote eylemlerini sunmak için.
-- `nativeMessaging`: seçilen içeriği ayrıca kurulan yerel OneNote köprüsüne
-  göndermek için.
-- `storage`: dili ve hedef bölüm tercihini yerel olarak saklamak için.
-- `notifications`: gönderimin başarılı veya başarısız olduğunu bildirmek için.
-
-Seçilen metin, görüntü ve notlar bu bilgisayardaki OneNote masaüstü
-uygulamasına iletilir. Eklenti bunları geliştiriciye veya bu projeye ait bir
-servise göndermez; Firefox kayıtlı parolalarını ve otomatik doldurma verilerini
-okumaz. OneNote, içeriği kullanıcının Microsoft hesabı ve OneNote ayarlarına
-göre eşitleyebilir. Ayrıntı için [eklenti kaynak kodunu](.) ve
-[Mozilla Eklenti Politikalarını](https://extensionworkshop.com/documentation/publish/add-on-policies/)
-inceleyin.
+Eklenti paketini `dist` klasöründe oluşturur. GitHub kaynak arşivini de
+oluşturmak için `.\package-release.ps1` komutunu çalıştırın. XPI yalnızca
+eklenti dosyalarını içerir; Windows köprüsü ayrıca kurulur.

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Setup instructions
+    url: https://github.com/slaweally/Firefox-OneNote-Quick-Save#install
+    about: Check the installation and troubleshooting guide first.
+  - name: Privacy policy
+    url: https://github.com/slaweally/Firefox-OneNote-Quick-Save/blob/main/PRIVACY.md
+    about: Learn what the extension handles and where data goes.

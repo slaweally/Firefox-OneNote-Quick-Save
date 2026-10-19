@@ -18,11 +18,15 @@ $files = @(
     'background.js',
     'README.md',
     'PRIVACY.md',
+    'docs\cover.png',
     'install.ps1',
     'install-native-host.ps1',
     'package-xpi.ps1',
     'native-host\Program.cs',
-    'icons\onenote.svg'
+    'icons\onenote.svg',
+    '.github\ISSUE_TEMPLATE\bug_report.yml',
+    '.github\ISSUE_TEMPLATE\feature_request.yml',
+    '.github\ISSUE_TEMPLATE\config.yml'
 )
 
 foreach ($relativePath in $files) {
