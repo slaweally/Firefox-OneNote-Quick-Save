@@ -30,6 +30,13 @@ title becomes the new page title.
   image, and save.
 - **Use your language:** choose English or Türkçe on first launch.
 
+## Screenshots / Ekran görüntüleri
+
+<div align="center">
+<img src="docs/screenshots/popup-en.png" width="320" alt="OneNote Quick Save popup in English">
+<img src="docs/screenshots/popup-tr.png" width="320" alt="OneNote Quick Save popup in Turkish">
+</div>
+
 ## Install
 
 ### 1. Install the Firefox extension

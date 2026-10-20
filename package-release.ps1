@@ -19,6 +19,8 @@ $files = @(
     'README.md',
     'PRIVACY.md',
     'docs\cover.png',
+    'docs\screenshots\popup-en.png',
+    'docs\screenshots\popup-tr.png',
     'install.ps1',
     'install-native-host.ps1',
     'package-xpi.ps1',
